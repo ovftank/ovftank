@@ -13,7 +13,7 @@
 <!-- PC Setup -->
 <h3>💻 Setup</h3>
 
-<a href="https://archlinux.org/" target="_blank"><img src="https://img.shields.io/badge/Arch-282a36?style=for-the-badge&logo=archlinux&logoColor=8f8f2"></a>
+<a href="https://archlinux.org/" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/Arch-282a36?style=for-the-badge&logo=archlinux&logoColor=8f8f2"></a>
 <a href="https://www.google.com/chrome/" target="_blank"><img src="https://img.shields.io/badge/Chrome-282a36?style=for-the-badge&logo=google-chrome&logoColor=f8f8f2"></a>
 <a href="https://neovim.io/" target="_blank"><img src="https://img.shields.io/badge/Neovim-282a36?style=for-the-badge&logo=neovim&logoColor=50fa7b"></a>
 <a href="https://git-scm.com/" target="_blank"><img src="https://img.shields.io/badge/Git-282a36?style=for-the-badge&logo=git&logoColor=ff5555"></a>
