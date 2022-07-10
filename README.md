@@ -8,7 +8,7 @@
 <li>❤️ Interests: The topic of hacking interests me</li>
 <li>📇 Contact: 
 <a href="https://facebook.com/tgbiztank"><img src="https://img.shields.io/badge/-Facebook-blue?style=flat-square&logo=Facebook&logoColor=white&link=https://facebook.com/tgbiztank"></a>
-<a href="mailto:tgbiztank@gmail.com"><img src="https://img.shields.io/badge/-Gmail-red?style=flat-square&logo=Gmail&logoColor=white&link=mailto:tgbiztank@gmail.com"></a></li>
+<a href="mailto:tgbiztank@gmail.com" ><img src="https://img.shields.io/badge/-Gmail-red?style=flat-square&logo=Gmail&logoColor=white&link=mailto:tgbiztank@gmail.com"></a></li>
 </ul>
 <!-- PC Setup -->
 <h3>💻 Setup</h3>
@@ -16,7 +16,7 @@
 <a href="https://archlinux.org/" target="_blank"><img src="https://img.shields.io/badge/Arch-282a36?style=for-the-badge&logo=archlinux&logoColor=8f8f2"></a>
 <a href="https://www.google.com/chrome/" target="_blank"><img src="https://img.shields.io/badge/Chrome-282a36?style=for-the-badge&logo=google-chrome&logoColor=f8f8f2"></a>
 <a href="https://neovim.io/" target="_blank"><img src="https://img.shields.io/badge/Neovim-282a36?style=for-the-badge&logo=neovim&logoColor=50fa7b"></a>
-<a href="https://git-scm.com/"><img src="https://img.shields.io/badge/Git-282a36?style=for-the-badge&logo=git&logoColor=ff5555"></a>
+<a href="https://git-scm.com/" target="_blank"><img src="https://img.shields.io/badge/Git-282a36?style=for-the-badge&logo=git&logoColor=ff5555"></a>
 <!-- Stats -->
 <h3>📊 Stats<h3>
 <img src="https://komarev.com/ghpvc/?username=tgbiztank&color=ff79c6"> <img src="https://wakatime.com/badge/user/7560b813-7116-473c-908c-e3a849fb6437.png">
