@@ -19,7 +19,7 @@
 <a href="https://git-scm.com/"><img src="https://img.shields.io/badge/Git-282a36?style=for-the-badge&logo=git&logoColor=ff5555"></a>
 <!-- Stats -->
 <h3>📊 Stats<h3>
-<img src="https://komarev.com/ghpvc/?username=tgbiztank&color=ff79c6"> <a href="https://wakatime.com/@7560b813-7116-473c-908c-e3a849fb6437"><img src="https://wakatime.com/badge/user/7560b813-7116-473c-908c-e3a849fb6437.svg" /></a>
+<img src="https://komarev.com/ghpvc/?username=tgbiztank&color=ff79c6"> <img src="https://wakatime.com/badge/user/7560b813-7116-473c-908c-e3a849fb6437.svg">
 <br>
 <img align="right" src="https://github-readme-stats.vercel.app/api/top-langs/?username=tgbiztank&layout=compact&theme=dracula" width="35%">
 <img align="left" src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=tgbiztank&theme=dracula" width="60%">
