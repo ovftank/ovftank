@@ -8,7 +8,7 @@
 <li>❤️ Interests: The topic of hacking interests me</li>
 <li>📇 Contact: 
 <a href="https://facebook.com/tgbiztank"><img src="https://img.shields.io/badge/-Facebook-blue?style=flat-square&logo=Facebook&logoColor=white&link=https://facebook.com/tgbiztank"></a>
-<a href="mailto: tgbiztank@gmail.com"><img src="https://img.shields.io/badge/-Gmail-red?style=flat-square&logo=Gmail&logoColor=white&link=mailto: tgbiztank@gmail.com"></a></li>
+<a href="mailto:tgbiztank@gmail.com"><img src="https://img.shields.io/badge/-Gmail-red?style=flat-square&logo=Gmail&logoColor=white&link=mailto:tgbiztank@gmail.com"></a></li>
 </ul>
 <!-- PC Setup -->
 <h3>💻 Setup</h3>
