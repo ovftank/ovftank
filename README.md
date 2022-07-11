@@ -1,5 +1,5 @@
 <!-- Kha Banh Gif quay cuc cang -->
-<a href="https://facebook.com/tgbiztank"><img align="right" src="https://d14eu5yur8w3te.cloudfront.net/api/v1/media/baseclub-media-uploads-production/42c19c32-4c74-4f40-bee6-20ce539b22f8.gif" width="50%"></a></br><h3>ℹ️ About me</h3>
+<a href="https://facebook.com/tgbiztank"><img align="right" src="https://d14eu5yur8w3te.cloudfront.net/api/v1/media/baseclub-media-uploads-production/42c19c32-4c74-4f40-bee6-20ce539b22f8.gif" width="60%"></a></br><h3>ℹ️ About me</h3>
 <ul>
 <!-- Infomation -->
 <li>😀 Nick name: tgbiztank</li>
