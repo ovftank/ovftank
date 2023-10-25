@@ -14,13 +14,13 @@
 <!-- PC Setup -->
 <h3>💻 My Setup</h3>
 
-<a href="https://github.com/gombiztank/dotfiles/" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/Arch-282a36?style=for-the-badge&logo=archlinux&logoColor=8f8f2"></a>
+<a href="https://github.com/tgbiztank/dotfiles/" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/Arch-282a36?style=for-the-badge&logo=archlinux&logoColor=8f8f2"></a>
 <a href="https://www.google.com/chrome/" target="_blank"><img src="https://img.shields.io/badge/Chrome-282a36?style=for-the-badge&logo=google-chrome&logoColor=f8f8f2"></a>
-<a href="https://github.com/gombiztank/dotfiles/tree/neovim" target="_blank"><img src="https://img.shields.io/badge/Neovim-282a36?style=for-the-badge&logo=neovim&logoColor=50fa7b"></a>
+<a href="https://github.com/tgbiztank/dotfiles/tree/neovim" target="_blank"><img src="https://img.shields.io/badge/Neovim-282a36?style=for-the-badge&logo=neovim&logoColor=50fa7b"></a>
 <!-- Stats -->
 <h3>📊 My Stats<h3>
-<a href="https://github.com/gombiztank"><img src="https://komarev.com/ghpvc/?username=gombiztank&color=ff79c6"></a>
-<a href="https://wakatime.com/@gombiztank"><img src="https://wakatime.com/badge/user/7560b813-7116-473c-908c-e3a849fb6437.png"/></a>
+<a href="https://github.com/tgbiztank"><img src="https://komarev.com/ghpvc/?username=tgbiztank&color=ff79c6"></a>
+<a href="https://wakatime.com/@tgbiztank"><img src="https://wakatime.com/badge/user/7560b813-7116-473c-908c-e3a849fb6437.png"/></a>
 <br>
-<a href="https://wakatime.com/@gombiztank"><img align="right" src="https://github-readme-stats.vercel.app/api/top-langs/?username=gombiztank&layout=compact&theme=dracula" width="35%"></a>
-<a href="https://github.com/gombiztank"><img align="left" src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=gombiztank&theme=dracula" width="60%"></a>
+<a href="https://wakatime.com/@tgbiztank"><img align="right" src="https://github-readme-stats.vercel.app/api/top-langs/?username=tgbiztank&layout=compact&theme=dracula" width="35%"></a>
+<a href="https://github.com/tgbiztank"><img align="left" src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=tgbiztank&theme=dracula" width="60%"></a>
