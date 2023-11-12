@@ -1,0 +1,30 @@
+name: Update Age
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  update_readme:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.12.0
+
+    - name: Update Age
+      run: |
+        python update_age.py
+
+    - name: Commit and push changes
+      run: |
+        git config --global user.name "tripleseven190504"
+        git config --global user.email "tripleseven190504@gmail.com"
+        git add README.md
+        git commit -m "Updated README.md" || echo "No changes to commit"
+        git push
