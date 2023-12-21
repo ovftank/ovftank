@@ -44,8 +44,8 @@
 <ul>
     <li>
         <p><strong>Operating System:</strong>
-            <a href="https://drive.massgrave.dev/en-us_windows_10_enterprise_ltsc_2021_x64_dvd_d289cf96.iso"><img
-                    src="https://img.shields.io/badge/Windows_10_(LTSC%202021)-230078D6?style=flat&logo=windows10&color=%230078D6"
+            <a href="https://drive.massgrave.dev/en_windows_10_enterprise_ltsc_2019_x64_dvd_5795bb03.iso"><img
+                    src="https://img.shields.io/badge/Windows_10_(LTSC%202019)-230078D6?style=flat&logo=windows10&color=%230078D6"
                     alt="Windows"></a>
             <a href="https://mirror.bizflycloud.vn/archlinux/iso/latest/"><img
                     src="https://img.shields.io/badge/Arch_Linux-231793D1?style=flat&amp;logo=arch-linux&amp;color=rgb(34%2C34%2C34)"
@@ -54,7 +54,7 @@
     </li>
     <li>
         <p><strong>Shell: </strong><a href="https://ohmyposh.dev/docs/installation/windows"><img
-                    src="https://j2c.cc/oh-my-posh-github" alt="Oh-My-Posh"></a>
+                    src="https://j2c.cc/oh-my-posh" alt="Oh-My-Posh"></a>
             <a href="https://ohmyz.sh/#install"><img src="https://tinyurl.com/oh-my-zsh-github" alt="Oh-My-Zsh"></a>
         </p>
     </li>
@@ -66,7 +66,7 @@
     <li>
         <p><strong>Terminal:</strong>
             <a href="https://community.chocolatey.org/packages/microsoft-windows-terminal"><img
-                    src="https://img.shields.io/badge/Windows_Terminal-4D4D4D?style=flat&amp;logo=windowsterminal&amp;color=%234D4D4D"
+                    src="https://img.shields.io/badge/Command_Prompt-4D4D4D?style=flat&amp;logo=windowsterminal&amp;color=%234D4D4D"
                     alt="Cmder"></a>
             <a href="https://archlinux.org/packages/extra/any/terminator/">
                 <img src="https://img.shields.io/badge/Terminator-241F31?style=flat&amp;logo=gnometerminal&amp;color=%23241F31"
@@ -95,6 +95,6 @@
                 <img height=200 align="center" src="https://github-readme-stats.vercel.app/api/wakatime?username=tripleseven190504&theme=dracula&langs_count=8&card_width=320">
             </a>
             <a href="https://github.com/tripleseven190504">
-                <img height=200 align="center" src="http://github-profile-summary-cards.vercel.app/api/cards/productive-time?username=tripleseven190504&theme=dracula&utcOffset=7">
+                <img height=200 align="center" src="http://github-profile-summary-cards.vercel.app/api/cards/productive-time?username=tripleseven190504&theme=dracula&utcOffset=7&card_width=320">
             </a>
         </div>
