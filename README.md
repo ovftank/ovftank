@@ -92,7 +92,7 @@
         <br>
         <div>
             <a href="https://github.com/tripleseven190504">
-                <img height=200 align="center" src="https://github-readme-stats.vercel.app/api/wakatime?username=tripleseven190504&theme=dracula&langs_count=8&card_width=320">
+                <img height=200 align="center" src="https://github-readme-stats.vercel.app/api/wakatime?username=tripleseven190504&theme=dracula&langs_count=5&card_width=320">
             </a>
             <a href="https://github.com/tripleseven190504">
                 <img height=200 align="center" src="http://github-profile-summary-cards.vercel.app/api/cards/productive-time?username=tripleseven190504&theme=dracula&utcOffset=7&card_width=320">
