@@ -38,20 +38,6 @@
         <img src="https://img.shields.io/badge/Bash-4EAA25?style=flat&amp;logo=gnubash&amp;color=rgb(34%2C34%2C34)"
             alt="Bash">
     </li>
-    <li><strong>WEB DEVELOPMENT:</strong> <img
-            src="https://img.shields.io/badge/HTML-E34F26?style=flat&amp;logo=html5&amp;color=rgb(34%2C34%2C34)"
-            alt="HTML">
-        <img src="https://img.shields.io/badge/CSS-1572B6?style=flat&amp;logo=css3&amp;color=%231572B6" alt="CSS">
-        <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&amp;logo=javascript&amp;color=rgb(34%2C34%2C34)"
-            alt="JavaScript">
-    </li>
-    <li>
-        <p><strong>DATABASE:</strong>
-            <a href="https://www.sqlite.org/download.html"><img
-                    src="https://img.shields.io/badge/SQLite-003B57?style=flat&amp;logo=sqlite&amp;color=rgb(34%2C34%2C34)"
-                    alt="SQLite"></a>
-        </p>
-    </li>
 </ul>
 <!-- PC Setup -->
 <h3 id="setup">💻 Setup</h3>
@@ -67,7 +53,7 @@
         </p>
     </li>
     <li>
-        <p><strong>Shell:</strong><a href="https://ohmyposh.dev/docs/installation/windows"><img
+        <p><strong>Shell: </strong><a href="https://ohmyposh.dev/docs/installation/windows"><img
                     src="https://j2c.cc/oh-my-posh-github" alt="Oh-My-Posh"></a>
             <a href="https://ohmyz.sh/#install"><img src="https://tinyurl.com/oh-my-zsh-github" alt="Oh-My-Zsh"></a>
         </p>
@@ -105,10 +91,10 @@
                 src="https://wakatime.com/badge/user/018c30ee-bce4-4e46-ab03-5214782a4e51.svg" /></a>
         <br>
         <div>
-            <a href="https://wakatime.com/@tripleseven190504">
-                <img height=250 align="center" src="https://github-readme-stats.vercel.app/api/wakatime?username=tripleseven190504&theme=dracula&langs_count=8&card_width=320">
+            <a href="https://github.com/tripleseven190504">
+                <img height=200 align="center" src="https://github-readme-stats.vercel.app/api/wakatime?username=tripleseven190504&theme=dracula&langs_count=8&card_width=320">
             </a>
             <a href="https://github.com/tripleseven190504">
-                <img height=250 align="center" src="http://github-profile-summary-cards.vercel.app/api/cards/productive-time?username=tripleseven190504&theme=dracula&utcOffset=7">
+                <img height=200 align="center" src="http://github-profile-summary-cards.vercel.app/api/cards/productive-time?username=tripleseven190504&theme=dracula&utcOffset=7">
             </a>
         </div>
