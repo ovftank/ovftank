@@ -102,7 +102,7 @@
         <a href="https://github.com/tripleseven190504"><img
                 src="https://komarev.com/ghpvc/?username=tripleseven190504&color=ff79c6"></a>
         <a href="https://wakatime.com/@tripleseven190504"><img
-                src="https://wakatime.com/badge/user/7560b813-7116-473c-908c-e3a849fb6437.png" /></a>
+                src="https://wakatime.com/badge/user/018c30ee-bce4-4e46-ab03-5214782a4e51.svg" /></a>
         <br>
         <div style="display: flex; align-items: center;">
             <a href="https://wakatime.com/@tripleseven190504" style="margin-right: 10px;">
