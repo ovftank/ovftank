@@ -106,7 +106,7 @@
         <br>
         <div style="display: flex; align-items: center;">
             <a href="https://wakatime.com/@tripleseven190504" style="margin-right: 10px;">
-                <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=tripleseven190504&layout=compact&theme=dracula"
+                <img src="https://github-readme-stats.vercel.app/api/wakatime?username=tripleseven190504&theme=dracula"
                     style="max-width: 100%; height: 100%;">
             </a>
             <a href="https://github.com/tripleseven190504">
