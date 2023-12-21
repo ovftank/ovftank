@@ -104,13 +104,11 @@
         <a href="https://wakatime.com/@tripleseven190504"><img
                 src="https://wakatime.com/badge/user/018c30ee-bce4-4e46-ab03-5214782a4e51.svg" /></a>
         <br>
-        <div style="display: flex; align-items: center;">
-            <a href="https://wakatime.com/@tripleseven190504" style="margin-right: 10px;">
-                <img src="https://github-readme-stats.vercel.app/api/wakatime?username=tripleseven190504&theme=dracula"
-                    style="max-width: 100%; height: 100%;">
+        <div>
+            <a href="https://wakatime.com/@tripleseven190504">
+                <img height=250 align="center" src="https://github-readme-stats.vercel.app/api/wakatime?username=tripleseven190504&theme=dracula&langs_count=8&card_width=320">
             </a>
             <a href="https://github.com/tripleseven190504">
-                <img src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=tripleseven190504&theme=dracula"
-                    style="max-width: 100%; height: 100%;">
+                <img height=250 align="center" src="http://github-profile-summary-cards.vercel.app/api/cards/productive-time?username=tripleseven190504&theme=dracula&utcOffset=7">
             </a>
         </div>
