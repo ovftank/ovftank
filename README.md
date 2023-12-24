@@ -21,24 +21,6 @@
 </ul>
 </li>
 </ul>
-<h3 id="development">💻 DEVELOPMENT</h3>
-<ul>
-    <li><strong>PROGRAMMING:</strong>
-        <a href="https://www.python.org/downloads/"><img
-                src="https://img.shields.io/badge/Python-3776AB?style=flat&amp;logo=Python&amp;color=rgb(34%2C34%2C34)"
-                alt="Python"></a>
-        <a href="https://www.autohotkey.com/download/ahk-install.exe"><img
-                src="https://img.shields.io/badge/AutoHotkey-1.1.37.01-334455?style=flat&amp;logo=autohotkey&amp;color=%23334455"
-                alt="AutoHotKey"></a>
-        <a href="https://www.lua.org/download.html"><img
-                src="https://img.shields.io/badge/Lua-2C2D72?style=flat&amp;logo=Lua&amp;color=%232C2D72" alt="Lua"></a>
-        <a href="https://www.mingw-w64.org/downloads/"><img
-                src="https://img.shields.io/badge/C%2B%2B-00599C?style=flat&amp;logo=cplusplus&amp;color=%2300599C"
-                alt="C++"></a>
-        <img src="https://img.shields.io/badge/Bash-4EAA25?style=flat&amp;logo=gnubash&amp;color=rgb(34%2C34%2C34)"
-            alt="Bash">
-    </li>
-</ul>
 <!-- PC Setup -->
 <h3 id="setup">💻 Setup</h3>
 <ul>
