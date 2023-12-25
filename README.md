@@ -2,7 +2,7 @@
 <h3 id="overview">ℹ️ About me</h3>
 <ul>
   <li><strong>👦 NAME: Tạ Tuấn Anh</strong></li>
-  <li><strong>🎂 AGE: 18</strong></li>
+  <li><strong>🎂 AGE: 19</strong></li>
   <li><strong>📍 ADDRESS: <a href="https://www.google.com/maps/place/Hanoi/">Hà Nội, Việt Nam</a></strong></li>
   <li><strong>❤️ Interests: The topic of hacking interests me</strong></li>
   <li>
