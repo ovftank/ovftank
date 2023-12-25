@@ -30,5 +30,5 @@
 </ul>
 <h3>📊 My Stats</h3><a href="https://github.com/tripleseven190504"><img src="https://komarev.com/ghpvc/?username=tripleseven190504&amp;color=ff79c6" alt=""></a> <a href="https://wakatime.com/@tripleseven190504"><img src="https://wakatime.com/badge/user/018c30ee-bce4-4e46-ab03-5214782a4e51.svg" alt="018c30ee-bce4-4e46-ab03-5214782a4e51"></a><br>
 <div>
-  <a href="https://github.com/tripleseven190504"><img height="200" align="center" src="https://github-readme-stats.vercel.app/api/wakatime?username=tripleseven190504&amp;theme=dracula&amp;langs_count=5&amp;card_width=320" alt="wakatime"></a> <a href="https://git.io/streak-stats"><img height="200" align="center" src="https://streak-stats.demolab.com?user=tripleseven190504&amp;theme=dracula&amp;date_format=j%2Fn%5B%2FY%5D&amp;card_width=300" alt="streak-stats"></a>
+  <a href="https://github.com/tripleseven190504"><img height="200" align="center" src="https://github-readme-stats.vercel.app/api/wakatime?username=tripleseven190504&amp;theme=dracula&amp;langs_count=5&amp;card_width=320" alt="wakatime"></a> <a href="https://github.com/tripleseven190504"><img height="200" align="center" src="https://streak-stats.demolab.com?user=tripleseven190504&amp;theme=dracula&amp;date_format=j%2Fn%5B%2FY%5D&amp;card_width=320"></a>
 </div>
