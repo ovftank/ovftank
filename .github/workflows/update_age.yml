@@ -19,13 +19,12 @@ jobs:
 
     - name: Update Age
       run: |
-        python update_age.py
-
-    - name: Commit and push changes
-      run: |
         git config --global user.name "tripleseven190504"
         git config --global user.email "tripleseven190504@gmail.com"
         git pull
+        python update_age.py
+    - name: Commit and push changes
+      run: |
         git add README.md
         git commit -m "Updated README.md" || echo "No changes to commit"
         git push
