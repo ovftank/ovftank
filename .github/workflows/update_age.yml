@@ -25,6 +25,7 @@ jobs:
       run: |
         git config --global user.name "tripleseven190504"
         git config --global user.email "tripleseven190504@gmail.com"
+        git pull
         git add README.md
         git commit -m "Updated README.md" || echo "No changes to commit"
         git push
