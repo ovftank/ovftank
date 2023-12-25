@@ -1,4 +1,4 @@
-<p align="center"><a align="center" href="https://git.io/typing-svg"><img src="https://readme-typing-svg.herokuapp.com?font=Rubik+Doodle+Shadow&amp;pause=1000&amp;color=6272A4&amp;center=true&amp;random=false&amp;width=435&amp;lines=Welcome+to+Ta+Tuan+Anh's+profile!" alt="readme-typing-svg"></a></p><!-- Infomation -->
+<p align="center"><a align="center" href="#"><img src="https://readme-typing-svg.herokuapp.com?font=Rubik+Doodle+Shadow&amp;pause=1000&amp;color=6272A4&amp;center=true&amp;random=false&amp;width=435&amp;lines=Welcome+to+Ta+Tuan+Anh's+profile!" alt="readme-typing-svg"></a></p><!-- Infomation -->
 <h3 id="overview">ℹ️ About me</h3>
 <ul>
   <li><strong>👦 NAME: Tạ Tuấn Anh</strong></li>
