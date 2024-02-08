@@ -34,6 +34,9 @@
     <a href="mailto:tripleseven190504@hotmail.com">
       <img src="https://img.shields.io/badge/Hotmail-0078D4?style=flat&amp;logo=microsoftoutlook&amp;color=%230078D4" alt="HOTMAIL">
     </a>
+    <a href="https://t.me/tripleseven190504">
+      <img src="https://img.shields.io/badge/Telegram-blue?logo=telegram" alt="TELEGRAM">
+    </a>
     <!-- [![DISCORD](https://img.shields.io/badge/Discord-5865F2?style=flat&logo=discord&color=%235865F2)]() -->
     <a href="https://zalo.me/0777190504">
       <img alt="Zalo" src="https://img.shields.io/badge/Zalo-white?style=flat&amp;logo=zalo&amp;logoColor=white&amp;color=%230068FF">
