@@ -13,17 +13,17 @@
 
 ``` javascript
 const aboutMe = () => {
-return {
-    name: "Tuan Anh",
-    languages: ["TypeScript", "Python", "ShellScript", "AutoHotKey", "JavaScript", "Ruby", "Go", "Rust"],
-    frontend: ["React", "Vue"],
-    backend: ["Flask", "Express", "Django", "Koa", "FastAPI", "NestJS", "Ruby on Rails"],
-    database: ["MongoDB", "SQLite", "PostgreSQL", "Firebase", "MySQL"],
-    operating_systems: ["Windows 10(LTSC 2019)", "ArchLinux"],
-    editors: ["VSCode", "Vim"],
-    tools: ["Qt", "Selenium", "Puppeteer", "Docker", "Git", "Babel"],
-    ci_cd: ["Travis CI", "GitHub Actions", "GitLab CI", "Jenkins"]
-};
+    return {
+        name: "Tuan Anh",
+        languages: ["TypeScript", "Python", "ShellScript", "AutoHotKey", "JavaScript", "Ruby", "Go", "Rust"],
+        frontend: ["React", "Vue"],
+        backend: ["Flask", "Express", "Django", "Koa", "FastAPI", "NestJS", "Ruby on Rails"],
+        database: ["MongoDB", "SQLite", "PostgreSQL", "Firebase", "MySQL"],
+        operating_systems: ["Windows 10(LTSC 2019)", "ArchLinux"],
+        editors: ["VSCode", "Vim"],
+        tools: ["Qt", "Selenium", "Puppeteer", "Docker", "Git", "Babel"],
+        ci_cd: ["Travis CI", "GitHub Actions", "GitLab CI", "Jenkins"]
+    };
 };
 console.log(JSON.stringify(aboutMe(), null, 4));
 ```
