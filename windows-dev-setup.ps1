@@ -30,13 +30,14 @@ if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
         exit 1
     }
 
-    $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+    $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
 }
 
 if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
     Write-Host "Dang cai dat Git..." -ForegroundColor Yellow
     choco install git.install --params "'/GitAndUnixToolsOnPath /NoShellIntegration /NoGuiHereIntegration'" -y
-} else {
+}
+else {
     Write-Host "Git da duoc cai dat." -ForegroundColor Green
 }
 
@@ -45,7 +46,8 @@ if (-not (Get-Command node -ErrorAction SilentlyContinue) -or (node -v) -notlike
     Write-Host "Dang cai dat NodeJS LTS $nodeVersion..." -ForegroundColor Yellow
     choco install nodejs-lts --version=$nodeVersion -y
     refreshenv
-} else {
+}
+else {
     Write-Host "NodeJS $nodeVersion da duoc cai dat." -ForegroundColor Green
 }
 
@@ -53,7 +55,8 @@ $pythonVersion = "3.10.11"
 $pythonCommand = Get-Command python -ErrorAction SilentlyContinue
 $currentPythonVersion = if ($pythonCommand) {
     python -c "import sys; print('.'.join(map(str, sys.version_info[:3])))"
-} else {
+}
+else {
     $null
 }
 
@@ -82,8 +85,9 @@ if (-not $pythonCommand -or $currentPythonVersion -ne $pythonVersion) {
     Start-Process -FilePath $pythonInstaller -ArgumentList $pythonArgs -Wait
     Remove-Item $pythonInstaller -Force
 
-    $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
-} else {
+    $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
+}
+else {
     Write-Host "Python $pythonVersion da duoc cai dat." -ForegroundColor Green
 }
 
@@ -110,7 +114,7 @@ if (-not (Test-Path $fontExtractPath)) {
 Expand-Archive -Path $fontZip -DestinationPath $fontExtractPath -Force
 
 Write-Host "Dang cai dat JetBrains Mono Nerd Font..." -ForegroundColor Yellow
-$fonts = Get-ChildItem -Path $fontExtractPath -Include '*.ttf','*.otf' -Recurse
+$fonts = Get-ChildItem -Path $fontExtractPath -Include '*.ttf', '*.otf' -Recurse
 foreach ($font in $fonts) {
     $destPath = Join-Path $fontDestination $font.Name
     Copy-Item -Path $font.FullName -Destination $destPath -Force
@@ -122,7 +126,7 @@ Remove-Item $fontExtractPath -Recurse -Force
 $fontRegistryPath = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts"
 foreach ($font in $fonts) {
     $fontName = $font.Name
-    $fontRegistryName = $fontName -replace '\.(ttf|otf)$',' (TrueType)'
+    $fontRegistryName = $fontName -replace '\.(ttf|otf)$', ' (TrueType)'
     New-ItemProperty -Path $fontRegistryPath -Name $fontRegistryName -Value $fontName -PropertyType String -Force | Out-Null
 }
 
@@ -152,7 +156,7 @@ Start-Process -FilePath $clinkInstaller -ArgumentList "/VERYSILENT" -Wait
 
 Remove-Item $clinkInstaller -Force
 
-$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+$env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
 
 $cursorPath = "$env:LOCALAPPDATA\Programs\Cursor\Cursor.exe"
 if (-not (Test-Path $cursorPath)) {
@@ -164,109 +168,40 @@ if (-not (Test-Path $cursorPath)) {
 
     Write-Host "Dang cai dat Cursor..." -ForegroundColor Yellow
     Start-Process -FilePath $cursorInstaller
-} else {
+}
+else {
     Write-Host "Cursor da duoc cai dat." -ForegroundColor Green
 }
 
-$evkeyPath = "$env:USERPROFILE\Documents\EVKey\EVKey64.exe"
-if (-not (Test-Path $evkeyPath)) {
-    Write-Host "Dang tai xuong EVKey..." -ForegroundColor Yellow
-    $evkeyUrl = "https://github.com/lamquangminh/EVKey/releases/download/Release/EVKey.zip"
-    $evkeyZip = "$env:TEMP\EVKey.zip"
-    $evkeyDestination = "$env:USERPROFILE\Documents\EVKey"
+Write-Host "Dang tai xuong EVKey..." -ForegroundColor Yellow
+$evkeyUrl = "https://github.com/lamquangminh/EVKey/releases/download/Release/EVKey.zip"
+$evkeyZip = "$env:TEMP\EVKey.zip"
+$evkeyDestination = "$env:USERPROFILE\Documents\EVKey"
 
-    Invoke-WebRequest -Uri $evkeyUrl -OutFile $evkeyZip
-    $evkeySetting = "$evkeyDestination\setting.ini"
-    $evkeySettingContent = @"
-[setting]
-SKey=5
-EApp=0
-SGui=1
-Type=0
-Codec=0
-DCodec=0
-SCodec=10
-SInput=7
-FMark=1
-SMetro=0
-RAdmin=1
-SSKey=1
-SCheck=1
-AResKey=0
-DisFOK=0
-CSuggestion=0
-CSuggestion2=0
-SModern=1
-Lang=1
-ICCharset=0
-OCCharset=1
-CConvert=1
-ToLower=0
-ToUpper=0
-ToSenCase=0
-ToCapEachWord=0
-RemoveTone=0
-EMacro=0
-AUpper=0
-CUnicode=0
-AMarcro=0
-RKey=0
-FKey=0
-NSound=1
-AUpdate=1
-GMode=0
-SConso=1
-AutoStart=0
-CTIcon=0
-EColor=4294638330
-EBColor=4294934528
-VColor=4294638330
-VBColor=4286578943
-NPCAM=0
-DefSound=1
-ThemeColor=0
-CASF1=0
-CASF2=0
-CASF3=0
-CASF4=0
-CASF5=0
-CASF6=0
-CASF7=0
-CASF8=0
-CASF9=0
-CASF10=1
-CASF11=0
-CASF12=0
-[user_method_input]
-Z=XOA_DAU
-S=DAU_SAC
-F=DAU_HUYEN
-R=DAU_HOI
-X=DAU_NGA
-J=DAU_NANG
-W=DAU_MOC_RAU_AUO
-A=DAU_MU_A
-E=DAU_MU_E
-O=DAU_MU_O
-D=DAU_CHU_D
-"@
+Write-Host "Dang dung EVKey..." -ForegroundColor Yellow
+Stop-Process -Name "EVKey64" -Force -ErrorAction SilentlyContinue
 
-    if (-not (Test-Path $evkeyDestination)) {
-        New-Item -ItemType Directory -Path $evkeyDestination | Out-Null
-    }
+Write-Host "Dang xoa EVKey cu..." -ForegroundColor Yellow
+Remove-Item -Path $evkeyDestination -Recurse -Force -ErrorAction SilentlyContinue
 
-    Write-Host "Dang giai nen EVKey vao Documents..." -ForegroundColor Yellow
-    Expand-Archive -Path $evkeyZip -DestinationPath $evkeyDestination -Force
-    Set-Content -Path $evkeySetting -Value $evkeySettingContent -Encoding UTF8
+Invoke-WebRequest -Uri $evkeyUrl -OutFile $evkeyZip
+$evkeySetting = "$evkeyDestination\setting.ini"
 
-    Remove-Item $evkeyZip -Force
-
-    $WshShell = New-Object -comObject WScript.Shell
-    $Shortcut = $WshShell.CreateShortcut("$env:USERPROFILE\Desktop\EVKey.lnk")
-    $Shortcut.TargetPath = "$evkeyDestination\EVKey64.exe"
-    $Shortcut.Save()
-} else {
-    Write-Host "EVKey da duoc cai dat." -ForegroundColor Green
+if (-not (Test-Path $evkeyDestination)) {
+    New-Item -ItemType Directory -Path $evkeyDestination | Out-Null
 }
+
+Write-Host "Dang giai nen EVKey vao Documents..." -ForegroundColor Yellow
+Expand-Archive -Path $evkeyZip -DestinationPath $evkeyDestination -Force
+
+Write-Host "Dang tai xuong cau hinh EVKey..." -ForegroundColor Yellow
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ovftank/ovftank/refs/heads/master/setting.ini" -OutFile $evkeySetting
+
+Remove-Item $evkeyZip -Force
+
+$WshShell = New-Object -comObject WScript.Shell
+$Shortcut = $WshShell.CreateShortcut("$env:USERPROFILE\Desktop\EVKey.lnk")
+$Shortcut.TargetPath = "$evkeyDestination\EVKey64.exe"
+$Shortcut.Save()
 
 Write-Host "`nCai dat thanh cong!" -ForegroundColor Green
