@@ -2,7 +2,7 @@
 <summary>🔗 VSCode Config</summary>
 
 ~~~bash
-vscode://profile/github/328322d7bb82223079c4be18f8513632
+vscode://profile/github/2b5044d5e2b46bc69b0c2a4345b4d3ce
 ~~~
 
 </details>
@@ -11,7 +11,7 @@ vscode://profile/github/328322d7bb82223079c4be18f8513632
 <summary>🔗 Cursor Config</summary>
 
 ~~~bash
-cursor://profile/github/328322d7bb82223079c4be18f8513632
+cursor://profile/github/2b5044d5e2b46bc69b0c2a4345b4d3ce
 ~~~
 
 </details>
