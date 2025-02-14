@@ -161,7 +161,7 @@ $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";
 $cursorPath = "$env:LOCALAPPDATA\Programs\Cursor\Cursor.exe"
 if (-not (Test-Path $cursorPath)) {
     Write-Host "Dang tai xuong Cursor..." -ForegroundColor Yellow
-    $cursorUrl = "https://downloader.cursor.sh/windows/nsis/x64"
+    $cursorUrl = "https://downloader.cursor.sh/builds/250103fqxdt5u9z/windows/nsis/x64"
     $cursorInstaller = "$env:TEMP\cursor_setup.exe"
 
     Invoke-WebRequest -Uri $cursorUrl -OutFile $cursorInstaller
