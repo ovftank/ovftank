@@ -11,7 +11,6 @@ if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
 
     $chocoDir = "C:\ProgramData\chocolatey"
     if (Test-Path $chocoDir) {
-        Write-Host "Phat hien Chocolatey cu, dang xoa..." -ForegroundColor Yellow
         Remove-Item -Path $chocoDir -Recurse -Force
     }
 
@@ -35,18 +34,21 @@ if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
 
 if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
     Write-Host "Dang cai dat Git..." -ForegroundColor Yellow
+
+    $gitUninstaller = "C:\Program Files\Git\unins000.exe"
+    if (Test-Path $gitUninstaller) {
+        Start-Process -FilePath $gitUninstaller -ArgumentList "/SILENT" -Wait
+    }
+
     choco install git.install --params "'/GitAndUnixToolsOnPath /NoShellIntegration /NoGuiHereIntegration'" -y
-}
-else {
-    Write-Host "Git da duoc cai dat." -ForegroundColor Green
 }
 
 Write-Host "Dang cai dat pnpm..." -ForegroundColor Yellow
-Invoke-WebRequest https://get.pnpm.io/install.ps1 -UseBasicParsing | Invoke-Expression
+$pnpmOutput = Invoke-WebRequest https://get.pnpm.io/install.ps1 -UseBasicParsing | Invoke-Expression *>&1
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
 
 Write-Host "Dang cai dat NodeJS Iron..." -ForegroundColor Yellow
-pnpm env use --global iron
+$nodeOutput = pnpm env use --global iron *>&1
 
 $pythonVersion = "3.10.11"
 $pythonCommand = Get-Command python -ErrorAction SilentlyContinue
@@ -114,7 +116,15 @@ Expand-Archive -Path $fontZip -DestinationPath $fontExtractPath -Force
 $fonts = Get-ChildItem -Path $fontExtractPath -Include '*.ttf', '*.otf' -Recurse
 foreach ($font in $fonts) {
     $destPath = Join-Path $fontDestination $font.Name
-    Copy-Item -Path $font.FullName -Destination $destPath -Force
+    if (-not (Test-Path $destPath)) {
+        try {
+            Copy-Item -Path $font.FullName -Destination $destPath -Force
+        }
+        catch {
+            Write-Host "Khong the cai dat font $($font.Name): $_" -ForegroundColor Yellow
+            continue
+        }
+    }
 }
 
 Remove-Item $fontZip -Force
