@@ -201,7 +201,7 @@ $Shortcut.TargetPath = "$evkeyDestination\EVKey64.exe"
 $Shortcut.Save()
 
 Write-Host "Dang cai dat Oh My Posh..." -ForegroundColor Yellow
-choco install oh-my-posh -y --force
+choco install oh-my-posh -y
 
 $clinkPath = "${env:ProgramFiles(x86)}\clink\clink.bat"
 if (Test-Path $clinkPath) {
@@ -232,7 +232,23 @@ if (-not (Test-Path $colorToolPath)) {
 
 Expand-Archive -Path $colorToolZip -DestinationPath $colorToolPath -Force
 
-Start-Process -FilePath "$colorToolPath\install.cmd" -Wait -NoNewWindow
+Write-Host "Đang cài đặt theme Dracula..." -ForegroundColor Yellow
+$colorToolExe = Join-Path $colorToolPath "ColorTool.exe"
+$installFolder = Join-Path $colorToolPath "install"
+
+if (Test-Path $colorToolExe) {
+    Copy-Item -Path "$installFolder\Windows PowerShell.lnk" -Destination "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\" -Force
+    Copy-Item -Path "$installFolder\Windows PowerShell (x86).lnk" -Destination "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\" -Force
+
+    $regFile = Join-Path $installFolder "Remove Default Console Overrides.reg"
+    Start-Process "reg.exe" -ArgumentList "import", "`"$regFile`"" -Wait -NoNewWindow
+
+    Start-Process -FilePath $colorToolExe -ArgumentList "-b", "`"$installFolder\Dracula-ColorTool.itermcolors`"" -Wait -NoNewWindow
+
+    Write-Host "Đã cài đặt theme Dracula thành công!" -ForegroundColor Green
+} else {
+    Write-Host "Không tìm thấy ColorTool.exe tại $colorToolExe" -ForegroundColor Red
+}
 
 Remove-Item $colorToolZip -Force
 Remove-Item $colorToolPath -Recurse -Force
