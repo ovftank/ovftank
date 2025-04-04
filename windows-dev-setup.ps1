@@ -106,28 +106,13 @@ $fontExtractPath = "$env:TEMP\JetBrainsMono"
 $fontDestination = "$env:windir\Fonts"
 
 Write-Host "Dang tai xuong JetBrains Mono Nerd Font..." -ForegroundColor Yellow
-$webClient = New-Object System.Net.WebClient
-$webClient.DownloadProgressChanged = {
-    $downloadedMB = [math]::Round($EventArgs.BytesReceived / 1MB, 2)
-    $totalMB = [math]::Round($EventArgs.TotalBytesToReceive / 1MB, 2)
-    $percentComplete = $EventArgs.ProgressPercentage
-
-    Write-Progress -Activity "Dang tai xuong JetBrains Mono Nerd Font" `
-        -Status "$downloadedMB MB / $totalMB MB" `
-        -PercentComplete $percentComplete
-}
-$webClient.DownloadFileCompleted = {
-    Write-Progress -Activity "Dang tai xuong JetBrains Mono Nerd Font" -Completed
-}
-
-$webClient.DownloadFileAsync($fontUrl, $fontZip)
-do { Start-Sleep -Milliseconds 100 }
-while ($webClient.IsBusy)
+Invoke-WebRequest -Uri $fontUrl -OutFile $fontZip
 
 if (-not (Test-Path $fontExtractPath)) {
     New-Item -ItemType Directory -Path $fontExtractPath | Out-Null
 }
 
+Write-Host "Dang giai nen font..." -ForegroundColor Yellow
 Expand-Archive -Path $fontZip -DestinationPath $fontExtractPath -Force
 
 $fonts = Get-ChildItem -Path $fontExtractPath -Include '*.ttf', '*.otf' -Recurse
@@ -164,7 +149,7 @@ if (!(Test-Path $registryPath)) {
 
 Set-ItemProperty -Path $registryPath -Name "FaceName" -Value $fontName -Type STRING
 Set-ItemProperty -Path $registryPath -Name "FontSize" -Value $fontSize -Type DWORD
-Set-ItemProperty -Path $registryPath -Name "WindowAlpha" -Value 230 -Type DWORD
+Set-ItemProperty -Path $registryPath -Name "WindowAlpha" -Value 242 -Type DWORD
 
 $clinkLatestRelease = Invoke-RestMethod -Uri "https://api.github.com/repos/chrisant996/clink/releases/latest"
 $clinkExeLink = ($clinkLatestRelease.assets | Where-Object { $_.name -like "*setup.exe" }).browser_download_url
@@ -174,7 +159,7 @@ Invoke-WebRequest -Uri $clinkExeLink -OutFile $clinkInstaller
 
 Start-Process -FilePath $clinkInstaller -ArgumentList "/S" -Wait
 
-Start-Process -FilePath "$env:ProgramFiles(x86)\clink\clink.bat" -ArgumentList "autorun install -- --quiet" -Wait
+Start-Process -FilePath "${env:ProgramFiles(x86)}\clink\clink.bat" -ArgumentList "autorun install -- --quiet" -Wait
 
 Remove-Item $clinkInstaller -Force
 
