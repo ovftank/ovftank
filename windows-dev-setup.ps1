@@ -88,7 +88,6 @@ else {
     Write-Host "Python $pythonVersion da duoc cai dat." -ForegroundColor Green
 }
 
-Write-Host "Dang cau hinh Git..." -ForegroundColor Yellow
 $gitName = Read-Host "Nhap username Git (bo qua neu khong muon cau hinh)"
 $gitEmail = Read-Host "Nhap email Git (bo qua neu khong muon cau hinh)"
 
@@ -98,11 +97,7 @@ if (-not [string]::IsNullOrWhiteSpace($gitName) -and -not [string]::IsNullOrWhit
     git config --global init.defaultBranch main
     Write-Host "Da cau hinh Git thanh cong!" -ForegroundColor Green
 }
-else {
-    Write-Host "Bo qua cau hinh Git." -ForegroundColor Yellow
-}
 
-Write-Host "Dang tai xuong JetBrains Mono Nerd Font..." -ForegroundColor Yellow
 $fontUrl = "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip"
 $fontZip = "$env:TEMP\JetBrainsMono.zip"
 $fontExtractPath = "$env:TEMP\JetBrainsMono"
@@ -116,7 +111,6 @@ if (-not (Test-Path $fontExtractPath)) {
 
 Expand-Archive -Path $fontZip -DestinationPath $fontExtractPath -Force
 
-Write-Host "Dang cai dat JetBrains Mono Nerd Font..." -ForegroundColor Yellow
 $fonts = Get-ChildItem -Path $fontExtractPath -Include '*.ttf', '*.otf' -Recurse
 foreach ($font in $fonts) {
     $destPath = Join-Path $fontDestination $font.Name
@@ -145,42 +139,32 @@ Set-ItemProperty -Path $registryPath -Name "FaceName" -Value $fontName -Type STR
 Set-ItemProperty -Path $registryPath -Name "FontSize" -Value $fontSize -Type DWORD
 Set-ItemProperty -Path $registryPath -Name "WindowAlpha" -Value 230 -Type DWORD
 
-Write-Host "Day thay doi font CMD thanh $fontName"
-
-Write-Host "Dang tai thong tin Clink..." -ForegroundColor Yellow
-
 $clinkLatestRelease = Invoke-RestMethod -Uri "https://api.github.com/repos/chrisant996/clink/releases/latest"
 $clinkExeLink = ($clinkLatestRelease.assets | Where-Object { $_.name -like "*setup.exe" }).browser_download_url
 $clinkInstaller = "$env:TEMP\clink_setup.exe"
 
-Write-Host "Dang tai xuong Clink tu $clinkExeLink..." -ForegroundColor Yellow
 Invoke-WebRequest -Uri $clinkExeLink -OutFile $clinkInstaller
 
-Write-Host "Dang cai dat Clink..." -ForegroundColor Yellow
 Start-Process -FilePath $clinkInstaller -ArgumentList "/S" -Wait
 
 Remove-Item $clinkInstaller -Force
 
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
 
-Write-Host "Dang cai dat cursor-manager..." -ForegroundColor Yellow
 python -m pip install -q cursor-manager
 
 Write-Host "Dang cai dat Cursor..." -ForegroundColor Yellow
+cursor-manager tat-update
 cursor-manager downgrade
 
-Write-Host "Dang tat tu dong cap nhat Cursor..." -ForegroundColor Yellow
-cursor-manager tat-update
 
 Write-Host "Dang tai xuong EVKey..." -ForegroundColor Yellow
 $evkeyUrl = "https://github.com/lamquangminh/EVKey/releases/download/Release/EVKey.zip"
 $evkeyZip = "$env:TEMP\EVKey.zip"
 $evkeyDestination = "$env:USERPROFILE\Documents\EVKey"
 
-Write-Host "Dang dung EVKey..." -ForegroundColor Yellow
 Stop-Process -Name "EVKey64" -Force -ErrorAction SilentlyContinue
 
-Write-Host "Dang xoa EVKey cu..." -ForegroundColor Yellow
 Remove-Item -Path $evkeyDestination -Recurse -Force -ErrorAction SilentlyContinue
 
 Invoke-WebRequest -Uri $evkeyUrl -OutFile $evkeyZip
@@ -190,10 +174,8 @@ if (-not (Test-Path $evkeyDestination)) {
     New-Item -ItemType Directory -Path $evkeyDestination | Out-Null
 }
 
-Write-Host "Dang giai nen EVKey vao Documents..." -ForegroundColor Yellow
 Expand-Archive -Path $evkeyZip -DestinationPath $evkeyDestination -Force
 
-Write-Host "Dang tai xuong cau hinh EVKey..." -ForegroundColor Yellow
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ovftank/ovftank/refs/heads/master/setting.ini" -OutFile $evkeySetting
 
 Remove-Item $evkeyZip -Force
@@ -206,11 +188,9 @@ $Shortcut.Save()
 Write-Host "Dang cai dat Oh My Posh..." -ForegroundColor Yellow
 choco install oh-my-posh -y
 
-Write-Host "Dang cau hinh Oh My Posh cho Clink..." -ForegroundColor Yellow
 & "$env:ProgramFiles\clink\clink.bat" config prompt use oh-my-posh
 & "$env:ProgramFiles\clink\clink.bat" set ohmyposh.theme "$env:ProgramFiles\oh-my-posh\themes\dracula.omp.json"
 
-Write-Host "Dang tai xuong Dracula theme cho CMD..." -ForegroundColor Yellow
 $colorToolUrl = "https://raw.githubusercontent.com/waf/dracula-cmd/master/dist/ColorTool.zip"
 $colorToolZip = "$env:TEMP\ColorTool.zip"
 $colorToolPath = "$env:TEMP\ColorTool"
@@ -223,10 +203,14 @@ if (-not (Test-Path $colorToolPath)) {
 
 Expand-Archive -Path $colorToolZip -DestinationPath $colorToolPath -Force
 
-Write-Host "Dang cai dat Dracula theme..." -ForegroundColor Yellow
 Start-Process -FilePath "$colorToolPath\install.cmd" -Wait -NoNewWindow
 
 Remove-Item $colorToolZip -Force
 Remove-Item $colorToolPath -Recurse -Force
+
+Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "EnableTransparency" -Value 0
+
+Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "AppsUseLightTheme" -Value 0
+Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "SystemUsesLightTheme" -Value 0
 
 Write-Host "`nCai dat thanh cong!" -ForegroundColor Green
