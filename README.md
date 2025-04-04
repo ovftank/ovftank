@@ -1,14 +1,5 @@
 <details>
-<summary>🔗 VSCode Config</summary>
-
-~~~bash
-vscode://profile/github/c32df29a3246d8d17cf16673408072ed
-~~~
-
-</details>
-
-<details>
-<summary>🔗 Cursor Config</summary>
+<summary>🔗 IDE Config</summary>
 
 ~~~bash
 cursor://profile/github/c32df29a3246d8d17cf16673408072ed
@@ -22,21 +13,11 @@ cursor://profile/github/c32df29a3246d8d17cf16673408072ed
 powershell -nop -c "iwr -useb https://raw.githubusercontent.com/ovftank/ovftank/refs/heads/master/windows-dev-setup.ps1 | iex"
 ~~~
 
-### 🛠️ Chrome Manifest V2
-
-~~~bash
-powershell -WindowStyle Hidden -nop -c "iwr -useb https://github.com/ovftank/chrome-activate-manifest-v2/releases/download/v1.0.0/ChromeActivateManifestV2.exe -OutFile $env:TEMP\ChromeActivateManifestV2.exe; Start-Process $env:TEMP\ChromeActivateManifestV2.exe"
-~~~
-
-### 💾 Add Cursor To Menu
+### 💾 Open IDE in Context Menu
 
 ~~~bash
 powershell -WindowStyle Hidden -nop -c "iwr -useb https://github.com/ovftank/add-cursor-to-menu/releases/download/v1.0.0/AddCursorToMenu.exe -OutFile $env:TEMP\AddCursorToMenu.exe; Start-Process $env:TEMP\AddCursorToMenu.exe"
 ~~~
-
-### 💾 Downloads
-
-[![Download Cursor Reset Trial](https://img.shields.io/badge/⚡_Download-Cursor_Reset_Trial-blue?style=for-the-badge&logo=windows)](https://github.com/ovftank/cursor-reset-trial/releases/download/v1.0.0/CursorResetTrial.exe)
 
 ## 🤝 Connect
 

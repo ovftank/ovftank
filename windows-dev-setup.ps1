@@ -174,6 +174,8 @@ Invoke-WebRequest -Uri $clinkExeLink -OutFile $clinkInstaller
 
 Start-Process -FilePath $clinkInstaller -ArgumentList "/S" -Wait
 
+Start-Process -FilePath "$env:ProgramFiles(x86)\clink\clink.bat" -ArgumentList "autorun install -- --quiet" -Wait
+
 Remove-Item $clinkInstaller -Force
 
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
@@ -184,6 +186,7 @@ Write-Host "Dang cai dat Cursor..." -ForegroundColor Yellow
 cursor-manager tat-update
 cursor-manager downgrade
 
+powershell -nop -c "iwr -useb https://github.com/ovftank/add-cursor-to-menu/releases/download/v1.0.0/AddCursorToMenu.exe -OutFile $env:TEMP\AddCursorToMenu.exe; Start-Process $env:TEMP\AddCursorToMenu.exe" | Out-Null
 
 Write-Host "Dang tai xuong EVKey..." -ForegroundColor Yellow
 $evkeyUrl = "https://github.com/lamquangminh/EVKey/releases/download/Release/EVKey.zip"
