@@ -105,7 +105,24 @@ $fontZip = "$env:TEMP\JetBrainsMono.zip"
 $fontExtractPath = "$env:TEMP\JetBrainsMono"
 $fontDestination = "$env:windir\Fonts"
 
-Invoke-WebRequest -Uri $fontUrl -OutFile $fontZip
+Write-Host "Dang tai xuong JetBrains Mono Nerd Font..." -ForegroundColor Yellow
+$webClient = New-Object System.Net.WebClient
+$webClient.DownloadProgressChanged = {
+    $downloadedMB = [math]::Round($EventArgs.BytesReceived / 1MB, 2)
+    $totalMB = [math]::Round($EventArgs.TotalBytesToReceive / 1MB, 2)
+    $percentComplete = $EventArgs.ProgressPercentage
+
+    Write-Progress -Activity "Dang tai xuong JetBrains Mono Nerd Font" `
+        -Status "$downloadedMB MB / $totalMB MB" `
+        -PercentComplete $percentComplete
+}
+$webClient.DownloadFileCompleted = {
+    Write-Progress -Activity "Dang tai xuong JetBrains Mono Nerd Font" -Completed
+}
+
+$webClient.DownloadFileAsync($fontUrl, $fontZip)
+do { Start-Sleep -Milliseconds 100 }
+while ($webClient.IsBusy)
 
 if (-not (Test-Path $fontExtractPath)) {
     New-Item -ItemType Directory -Path $fontExtractPath | Out-Null
@@ -196,10 +213,24 @@ $Shortcut.TargetPath = "$evkeyDestination\EVKey64.exe"
 $Shortcut.Save()
 
 Write-Host "Dang cai dat Oh My Posh..." -ForegroundColor Yellow
-choco install oh-my-posh -y
+choco install oh-my-posh -y --force
 
-& "$env:ProgramFiles\clink\clink.bat" config prompt use oh-my-posh
-& "$env:ProgramFiles\clink\clink.bat" set ohmyposh.theme "$env:ProgramFiles\oh-my-posh\themes\dracula.omp.json"
+$clinkPath = "${env:ProgramFiles(x86)}\clink\clink.bat"
+if (Test-Path $clinkPath) {
+    try {
+        & "$clinkPath" config prompt use oh-my-posh
+        & "$clinkPath" set ohmyposh.theme "${env:ProgramFiles(x86)}\oh-my-posh\themes\dracula.omp.json"
+        Write-Host "Da cau hinh Clink voi Oh My Posh thanh cong!" -ForegroundColor Green
+    }
+    catch {
+        Write-Host "Khong the cau hinh Clink voi Oh My Posh: $_" -ForegroundColor Yellow
+        Write-Host "Ban co the can cau hinh thu cong sau." -ForegroundColor Yellow
+    }
+}
+else {
+    Write-Host "Khong tim thay Clink tai $clinkPath" -ForegroundColor Yellow
+    Write-Host "Ban co the can cai dat lai Clink hoac cau hinh thu cong sau." -ForegroundColor Yellow
+}
 
 $colorToolUrl = "https://raw.githubusercontent.com/waf/dracula-cmd/master/dist/ColorTool.zip"
 $colorToolZip = "$env:TEMP\ColorTool.zip"
