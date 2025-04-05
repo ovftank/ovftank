@@ -44,11 +44,14 @@ if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
 }
 
 Write-Host "Dang cai dat pnpm..." -ForegroundColor Yellow
-$pnpmOutput = Invoke-WebRequest https://get.pnpm.io/install.ps1 -UseBasicParsing | Invoke-Expression *>&1
+Invoke-WebRequest https://get.pnpm.io/install.ps1 -UseBasicParsing | Invoke-Expression *>&1
+
+
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
+refreshenv
 
 Write-Host "Dang cai dat NodeJS Iron..." -ForegroundColor Yellow
-$nodeOutput = pnpm env use --global iron *>&1
+pnpm env use --global iron *>&1
 
 $pythonVersion = "3.10.11"
 $pythonCommand = Get-Command python -ErrorAction SilentlyContinue
@@ -224,34 +227,45 @@ $colorToolUrl = "https://raw.githubusercontent.com/waf/dracula-cmd/master/dist/C
 $colorToolZip = "$env:TEMP\ColorTool.zip"
 $colorToolPath = "$env:TEMP\ColorTool"
 
-Invoke-WebRequest -Uri $colorToolUrl -OutFile $colorToolZip
+try {
+    if (Test-Path $colorToolPath) {
+        Remove-Item -Path $colorToolPath -Recurse -Force
+    }
+    New-Item -ItemType Directory -Path $colorToolPath -Force | Out-Null
 
-if (-not (Test-Path $colorToolPath)) {
-    New-Item -ItemType Directory -Path $colorToolPath | Out-Null
+    Invoke-WebRequest -Uri $colorToolUrl -OutFile $colorToolZip -UseBasicParsing
+    Expand-Archive -Path $colorToolZip -DestinationPath $env:TEMP -Force
+
+    Write-Host "Dang cai dat theme Dracula..." -ForegroundColor Yellow
+    $colorToolExe = Join-Path $colorToolPath "ColorTool.exe"
+    $installFolder = Join-Path $colorToolPath "install"
+
+    if (Test-Path $colorToolExe) {
+        Copy-Item -Path "$installFolder\Windows PowerShell.lnk" -Destination "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\" -Force
+        Copy-Item -Path "$installFolder\Windows PowerShell (x86).lnk" -Destination "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\" -Force
+
+        $regFile = Join-Path $installFolder "Remove Default Console Overrides.reg"
+        Start-Process "reg.exe" -ArgumentList "import", "`"$regFile`"" -Wait -NoNewWindow
+
+        Start-Process -FilePath $colorToolExe -ArgumentList "-b", "`"$installFolder\Dracula-ColorTool.itermcolors`"" -Wait -NoNewWindow
+
+        Write-Host "Da cai dat theme Dracula thanh cong!" -ForegroundColor Green
+    }
+    else {
+        Write-Host "Khong tim thay ColorTool.exe tai $colorToolExe" -ForegroundColor Red
+    }
 }
-
-Expand-Archive -Path $colorToolZip -DestinationPath $colorToolPath -Force
-
-Write-Host "Đang cài đặt theme Dracula..." -ForegroundColor Yellow
-$colorToolExe = Join-Path $colorToolPath "ColorTool.exe"
-$installFolder = Join-Path $colorToolPath "install"
-
-if (Test-Path $colorToolExe) {
-    Copy-Item -Path "$installFolder\Windows PowerShell.lnk" -Destination "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\" -Force
-    Copy-Item -Path "$installFolder\Windows PowerShell (x86).lnk" -Destination "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\" -Force
-
-    $regFile = Join-Path $installFolder "Remove Default Console Overrides.reg"
-    Start-Process "reg.exe" -ArgumentList "import", "`"$regFile`"" -Wait -NoNewWindow
-
-    Start-Process -FilePath $colorToolExe -ArgumentList "-b", "`"$installFolder\Dracula-ColorTool.itermcolors`"" -Wait -NoNewWindow
-
-    Write-Host "Đã cài đặt theme Dracula thành công!" -ForegroundColor Green
-} else {
-    Write-Host "Không tìm thấy ColorTool.exe tại $colorToolExe" -ForegroundColor Red
+catch {
+    Write-Host "Loi khi cai dat ColorTool: $_" -ForegroundColor Red
 }
-
-Remove-Item $colorToolZip -Force
-Remove-Item $colorToolPath -Recurse -Force
+finally {
+    if (Test-Path $colorToolZip) {
+        Remove-Item $colorToolZip -Force
+    }
+    if (Test-Path $colorToolPath) {
+        Remove-Item $colorToolPath -Recurse -Force
+    }
+}
 
 Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "EnableTransparency" -Value 0
 
