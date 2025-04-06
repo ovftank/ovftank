@@ -172,7 +172,6 @@ python -m pip install -q cursor-manager
 
 Write-Host "Dang cai dat Cursor..." -ForegroundColor Yellow
 cursor-manager tat-update
-cursor-manager downgrade
 
 powershell -nop -c "iwr -useb https://github.com/ovftank/add-cursor-to-menu/releases/download/v1.0.0/AddCursorToMenu.exe -OutFile $env:TEMP\AddCursorToMenu.exe; Start-Process $env:TEMP\AddCursorToMenu.exe" | Out-Null
 
