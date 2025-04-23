@@ -3,6 +3,41 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
     Write-Warning "Vui long chay script nay voi quyen Administrator!"
     break
 }
+$path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects"
+Set-ItemProperty -Path "HKCU:\Control Panel\Mouse" -Name "MouseSpeed" -Value "0"
+Set-ItemProperty -Path "HKCU:\Control Panel\Mouse" -Name "MouseThreshold1" -Value "0"
+Set-ItemProperty -Path "HKCU:\Control Panel\Mouse" -Name "MouseThreshold2" -Value "0"
+Set-ItemProperty -Path "HKCU:\Control Panel\Mouse" -Name "MouseSensitivity" -Value "6"
+Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Name LaunchTo -Type DWord -Value 1
+Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer -Name ShowRecent -Type DWord -Value 0
+Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer -Name ShowFrequent -Type DWord -Value 0
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "Hidden" -Value 1
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "HideFileExt" -Value 0
+Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "506"
+Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\ToggleKeys" -Name "Flags" -Type String -Value "58"
+Set-ItemProperty -Path $path -Name VisualFXSetting -Value 2
+Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\Keyboard Response" -Name "Flags" -Type String -Value "122"
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" -Name "MaxCacheTtl" -Type DWord -Value 86400
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" -Name "MaxNegativeCacheTtl" -Type DWord -Value 0
+Stop-Service "WSearch" -Force
+Set-Service "WSearch" -StartupType Disabled
+
+powercfg -h off
+$shell = New-Object -ComObject Shell.Application
+$quickAccess = $shell.Namespace("shell:::{679F85CB-0220-4080-B29B-5540CC05AAB6}")
+$items = $quickAccess.Items()
+
+foreach ($item in $items) {
+    $verb = ($item.Verbs() | Where-Object {$_.Name -eq "Unpin from Quick access"})
+    if ($verb) {
+        $verb.DoIt()
+    }
+}
+Remove-Item -Path "$env:APPDATA\Microsoft\Windows\Recent\*" -Force -Recurse
+Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" -Name "ShowRecent" -Value 0
+Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" -Name "ShowFrequent" -Value 0
+Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search -Name SearchBoxTaskbarMode -Value 0 -Type DWord -Force
+
 $gitName = Read-Host "Nhap username Git (bo qua neu khong muon cau hinh)"
 $gitEmail = Read-Host "Nhap email Git (bo qua neu khong muon cau hinh)"
 
@@ -53,7 +88,8 @@ Write-Host "Dang kiem tra pnpm..." -ForegroundColor Yellow
 $pnpmPath = Join-Path $env:USERPROFILE "AppData\Local\pnpm\pnpm.exe"
 if (Test-Path $pnpmPath) {
     Write-Host "pnpm da duoc cai dat, bo qua..." -ForegroundColor Green
-} else {
+}
+else {
     Write-Host "Dang cai dat pnpm..." -ForegroundColor Yellow
     try {
         $ProgressPreference = 'SilentlyContinue'
@@ -64,7 +100,8 @@ if (Test-Path $pnpmPath) {
         if (Test-Path $pnpmPath) {
             & $pnpmPath env use --global iron *> $null
             Write-Host "Da cai dat pnpm thanh cong!" -ForegroundColor Green
-        } else {
+        }
+        else {
             Write-Host "Khong the cai dat pnpm" -ForegroundColor Red
         }
     }
@@ -213,13 +250,12 @@ Remove-Item $regFile -Force
 Write-Host "Da cai dat va cau hinh OpenKey thanh cong!" -ForegroundColor Green
 
 Write-Host "Dang cai dat Oh My Posh..." -ForegroundColor Yellow
-$chocoOutput = choco install oh-my-posh -y *>&1 | Out-Null
-
+choco install oh-my-posh -y *>&1 | Out-Null
 $clinkPath = "${env:ProgramFiles(x86)}\clink\clink.bat"
 if (Test-Path $clinkPath) {
     try {
-        Start-Process "$clinkPath" -ArgumentList "config prompt use oh-my-posh" -NoNewWindow -Wait -RedirectStandardOutput $null -RedirectStandardError $null
-        Start-Process "$clinkPath" -ArgumentList "set ohmyposh.theme `"${env:ProgramFiles(x86)}\oh-my-posh\themes\dracula.omp.json`"" -NoNewWindow -Wait -RedirectStandardOutput $null -RedirectStandardError $null
+        Start-Process "$clinkPath" -ArgumentList "config prompt use oh-my-posh"
+        Start-Process "$clinkPath" -ArgumentList "set ohmyposh.theme `"${env:ProgramFiles(x86)}\oh-my-posh\themes\dracula.omp.json`""
         Write-Host "Da cau hinh Clink voi Oh My Posh thanh cong!" -ForegroundColor Green
     }
     catch {
@@ -289,5 +325,5 @@ Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\P
 
 Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "AppsUseLightTheme" -Value 0
 Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "SystemUsesLightTheme" -Value 0
-
+Stop-Process -Name explorer -Force
 Write-Host "`nCai dat thanh cong!" -ForegroundColor Green
