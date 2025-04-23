@@ -3,6 +3,8 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
     Write-Warning "Vui long chay script nay voi quyen Administrator!"
     break
 }
+$gitName = Read-Host "Nhap username Git (bo qua neu khong muon cau hinh)"
+$gitEmail = Read-Host "Nhap email Git (bo qua neu khong muon cau hinh)"
 
 Write-Host "Dang cai dat..." -ForegroundColor Green
 
@@ -17,7 +19,8 @@ if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
     Set-ExecutionPolicy Bypass -Scope Process -Force
     [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
     try {
-        Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+        $ProgressPreference = 'SilentlyContinue'
+        Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1')) *>&1 | Out-Null
 
         if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
             throw "Khong the cai dat Chocolatey"
@@ -27,6 +30,9 @@ if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
         Write-Host "Loi khi cai dat Chocolatey: $_" -ForegroundColor Red
         Write-Host "Vui long chay lai script." -ForegroundColor Red
         exit 1
+    }
+    finally {
+        $ProgressPreference = 'Continue'
     }
 
     $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
@@ -43,15 +49,29 @@ if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
     choco install git.install --params "'/GitAndUnixToolsOnPath /NoShellIntegration /NoGuiHereIntegration'" -y
 }
 
-Write-Host "Dang cai dat pnpm..." -ForegroundColor Yellow
-Invoke-WebRequest https://get.pnpm.io/install.ps1 -UseBasicParsing | Invoke-Expression *>&1
+Write-Host "Dang kiem tra pnpm..." -ForegroundColor Yellow
+$pnpmPath = Join-Path $env:USERPROFILE "AppData\Local\pnpm\pnpm.exe"
+if (Test-Path $pnpmPath) {
+    Write-Host "pnpm da duoc cai dat, bo qua..." -ForegroundColor Green
+} else {
+    Write-Host "Dang cai dat pnpm..." -ForegroundColor Yellow
+    try {
+        $ProgressPreference = 'SilentlyContinue'
+        Invoke-WebRequest https://get.pnpm.io/install.ps1 -UseBasicParsing | Invoke-Expression *>&1 | Out-Null
+        $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
+        $ProgressPreference = 'Continue'
 
-
-$env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
-refreshenv
-
-Write-Host "Dang cai dat NodeJS Iron..." -ForegroundColor Yellow
-pnpm env use --global iron *>&1
+        if (Test-Path $pnpmPath) {
+            & $pnpmPath env use --global iron *> $null
+            Write-Host "Da cai dat pnpm thanh cong!" -ForegroundColor Green
+        } else {
+            Write-Host "Khong the cai dat pnpm" -ForegroundColor Red
+        }
+    }
+    catch {
+        Write-Host "Loi khi cai dat pnpm: $_" -ForegroundColor Red
+    }
+}
 
 $pythonVersion = "3.10.11"
 $pythonCommand = Get-Command python -ErrorAction SilentlyContinue
@@ -92,9 +112,6 @@ if (-not $pythonCommand -or $currentPythonVersion -ne $pythonVersion) {
 else {
     Write-Host "Python $pythonVersion da duoc cai dat." -ForegroundColor Green
 }
-
-$gitName = Read-Host "Nhap username Git (bo qua neu khong muon cau hinh)"
-$gitEmail = Read-Host "Nhap email Git (bo qua neu khong muon cau hinh)"
 
 if (-not [string]::IsNullOrWhiteSpace($gitName) -and -not [string]::IsNullOrWhiteSpace($gitEmail)) {
     git config --global user.name $gitName
@@ -168,39 +185,32 @@ Remove-Item $clinkInstaller -Force
 
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
 
-python -m pip install -q cursor-manager
+Write-Host "Dang tai xuong OpenKey..." -ForegroundColor Yellow
+$openKeyUrl = "https://github.com/tuyenvm/OpenKey/releases/download/2.0.5/OpenKey64-Windows-2.0.5-RC.zip"
+$openKeyZip = "$env:TEMP\OpenKey.zip"
+$openKeyDestination = "$env:USERPROFILE\Documents\OpenKey"
 
-Write-Host "Dang cai dat Cursor..." -ForegroundColor Yellow
-cursor-manager tat-update
+Stop-Process -Name "OpenKey64" -Force -ErrorAction SilentlyContinue
 
-powershell -nop -c "iwr -useb https://github.com/ovftank/add-cursor-to-menu/releases/download/v1.0.0/AddCursorToMenu.exe -OutFile $env:TEMP\AddCursorToMenu.exe; Start-Process $env:TEMP\AddCursorToMenu.exe" | Out-Null
-
-Write-Host "Dang tai xuong EVKey..." -ForegroundColor Yellow
-$evkeyUrl = "https://github.com/lamquangminh/EVKey/releases/download/Release/EVKey.zip"
-$evkeyZip = "$env:TEMP\EVKey.zip"
-$evkeyDestination = "$env:USERPROFILE\Documents\EVKey"
-
-Stop-Process -Name "EVKey64" -Force -ErrorAction SilentlyContinue
-
-Remove-Item -Path $evkeyDestination -Recurse -Force -ErrorAction SilentlyContinue
-
-Invoke-WebRequest -Uri $evkeyUrl -OutFile $evkeyZip
-$evkeySetting = "$evkeyDestination\setting.ini"
-
-if (-not (Test-Path $evkeyDestination)) {
-    New-Item -ItemType Directory -Path $evkeyDestination | Out-Null
+Remove-Item -Path $openKeyDestination -Recurse -Force -ErrorAction SilentlyContinue
+if (-not (Test-Path $openKeyDestination)) {
+    New-Item -ItemType Directory -Path $openKeyDestination | Out-Null
 }
-
-Expand-Archive -Path $evkeyZip -DestinationPath $evkeyDestination -Force
-
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ovftank/ovftank/refs/heads/master/setting.ini" -OutFile $evkeySetting
-
-Remove-Item $evkeyZip -Force
-
+Invoke-WebRequest -Uri $openKeyUrl -OutFile $openKeyZip
+Write-Host "Dang giai nen OpenKey..." -ForegroundColor Yellow
+Expand-Archive -Path $openKeyZip -DestinationPath $openKeyDestination -Force
+Remove-Item $openKeyZip -Force
 $WshShell = New-Object -comObject WScript.Shell
-$Shortcut = $WshShell.CreateShortcut("$env:USERPROFILE\Desktop\EVKey.lnk")
-$Shortcut.TargetPath = "$evkeyDestination\EVKey64.exe"
+$Shortcut = $WshShell.CreateShortcut("$env:USERPROFILE\Desktop\OpenKey.lnk")
+$Shortcut.TargetPath = "$openKeyDestination\OpenKey64.exe"
 $Shortcut.Save()
+Write-Host "Dang cau hinh OpenKey..." -ForegroundColor Yellow
+$regUrl = "https://raw.githubusercontent.com/ovftank/ovftank/refs/heads/master/OpenKey.reg"
+$regFile = "$env:TEMP\OpenKey.reg"
+Invoke-WebRequest -Uri $regUrl -OutFile $regFile
+Start-Process "reg.exe" -ArgumentList "import", "`"$regFile`"" -Wait -NoNewWindow
+Remove-Item $regFile -Force
+Write-Host "Da cai dat va cau hinh OpenKey thanh cong!" -ForegroundColor Green
 
 Write-Host "Dang cai dat Oh My Posh..." -ForegroundColor Yellow
 choco install oh-my-posh -y
@@ -221,6 +231,37 @@ else {
     Write-Host "Khong tim thay Clink tai $clinkPath" -ForegroundColor Yellow
     Write-Host "Ban co the can cai dat lai Clink hoac cau hinh thu cong sau." -ForegroundColor Yellow
 }
+
+Write-Host "Dang tai Visual Studio Code..." -ForegroundColor Yellow
+$vscodeUrl = "https://code.visualstudio.com/sha/download?build=stable&os=win32-x64-user"
+$vscodePath = "$env:TEMP\vscode_installer.exe"
+
+try {
+    Invoke-WebRequest -Uri $vscodeUrl -OutFile $vscodePath -UseBasicParsing
+    if (!(Test-Path $vscodePath)) {
+        throw "Khong the cai dat VSCode"
+    }
+    Write-Host "Dang cai dat Visual Studio Code..." -ForegroundColor Yellow
+    $installArgs = @(
+        '/VERYSILENT'
+        '/NORESTART'
+        '/MERGETASKS=!desktopicon,!quicklaunchicon,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath,!runcode'
+    )
+    $process = Start-Process -FilePath $vscodePath -ArgumentList ($installArgs -join '') -Wait -PassThru
+    if ($process.ExitCode -ne 0) {
+        throw "Khong the cai dat VSCode: $($process.ExitCode)"
+    }
+    Write-Host "Da cai dat Visual Studio Code thanh cong!" -ForegroundColor Green
+}
+catch {
+    Write-Host "Loi khi cai dat Visual Studio Code: $_" -ForegroundColor Red
+}
+finally {
+    if (Test-Path $vscodePath) {
+        Remove-Item $vscodePath -Force
+    }
+}
+
 
 $colorToolUrl = "https://raw.githubusercontent.com/waf/dracula-cmd/master/dist/ColorTool.zip"
 $colorToolZip = "$env:TEMP\ColorTool.zip"
