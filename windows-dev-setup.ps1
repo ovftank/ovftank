@@ -213,18 +213,17 @@ Remove-Item $regFile -Force
 Write-Host "Da cai dat va cau hinh OpenKey thanh cong!" -ForegroundColor Green
 
 Write-Host "Dang cai dat Oh My Posh..." -ForegroundColor Yellow
-choco install oh-my-posh -y
+$chocoOutput = choco install oh-my-posh -y *>&1 | Out-Null
 
 $clinkPath = "${env:ProgramFiles(x86)}\clink\clink.bat"
 if (Test-Path $clinkPath) {
     try {
-        & "$clinkPath" config prompt use oh-my-posh
-        & "$clinkPath" set ohmyposh.theme "${env:ProgramFiles(x86)}\oh-my-posh\themes\dracula.omp.json"
+        Start-Process "$clinkPath" -ArgumentList "config prompt use oh-my-posh" -NoNewWindow -Wait -RedirectStandardOutput $null -RedirectStandardError $null
+        Start-Process "$clinkPath" -ArgumentList "set ohmyposh.theme `"${env:ProgramFiles(x86)}\oh-my-posh\themes\dracula.omp.json`"" -NoNewWindow -Wait -RedirectStandardOutput $null -RedirectStandardError $null
         Write-Host "Da cau hinh Clink voi Oh My Posh thanh cong!" -ForegroundColor Green
     }
     catch {
-        Write-Host "Khong the cau hinh Clink voi Oh My Posh: $_" -ForegroundColor Yellow
-        Write-Host "Ban co the can cau hinh thu cong sau." -ForegroundColor Yellow
+        Write-Host "Khong the cau hinh Clink voi Oh My Posh" -ForegroundColor Yellow
     }
 }
 else {
@@ -232,34 +231,13 @@ else {
     Write-Host "Ban co the can cai dat lai Clink hoac cau hinh thu cong sau." -ForegroundColor Yellow
 }
 
-Write-Host "Dang tai Visual Studio Code..." -ForegroundColor Yellow
-$vscodeUrl = "https://code.visualstudio.com/sha/download?build=stable&os=win32-x64-user"
-$vscodePath = "$env:TEMP\vscode_installer.exe"
-
+Write-Host "Dang cai dat Visual Studio Code..." -ForegroundColor Yellow
 try {
-    Invoke-WebRequest -Uri $vscodeUrl -OutFile $vscodePath -UseBasicParsing
-    if (!(Test-Path $vscodePath)) {
-        throw "Khong the cai dat VSCode"
-    }
-    Write-Host "Dang cai dat Visual Studio Code..." -ForegroundColor Yellow
-    $installArgs = @(
-        '/VERYSILENT'
-        '/NORESTART'
-        '/MERGETASKS=!desktopicon,!quicklaunchicon,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath,!runcode'
-    )
-    $process = Start-Process -FilePath $vscodePath -ArgumentList ($installArgs -join '') -Wait -PassThru
-    if ($process.ExitCode -ne 0) {
-        throw "Khong the cai dat VSCode: $($process.ExitCode)"
-    }
+    choco install vscode --params "/NoDesktopIcon /NoQuicklaunchIcon" -y *>&1 | Out-Null
     Write-Host "Da cai dat Visual Studio Code thanh cong!" -ForegroundColor Green
 }
 catch {
     Write-Host "Loi khi cai dat Visual Studio Code: $_" -ForegroundColor Red
-}
-finally {
-    if (Test-Path $vscodePath) {
-        Remove-Item $vscodePath -Force
-    }
 }
 
 
