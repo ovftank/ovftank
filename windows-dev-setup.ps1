@@ -3,6 +3,16 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
     Write-Warning "Vui long chay script nay voi quyen Administrator!"
     break
 }
+
+$regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\System"
+if (Test-Path $regPath) {
+    $disableRegedit = Get-ItemProperty -Path $regPath -Name "DisableRegistryTools" -ErrorAction SilentlyContinue
+    if ($disableRegedit -ne $null -and $disableRegedit.DisableRegistryTools -eq 1) {
+        Set-ItemProperty -Path $regPath -Name "DisableRegistryTools" -Value 0
+        Write-Host "Đã bật Registry Editor thành công!" -ForegroundColor Green
+    }
+}
+
 $path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects"
 Set-ItemProperty -Path "HKCU:\Control Panel\Mouse" -Name "MouseSpeed" -Value "0"
 Set-ItemProperty -Path "HKCU:\Control Panel\Mouse" -Name "MouseThreshold1" -Value "0"
@@ -19,8 +29,16 @@ Set-ItemProperty -Path $path -Name VisualFXSetting -Value 2
 Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\Keyboard Response" -Name "Flags" -Type String -Value "122"
 Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" -Name "MaxCacheTtl" -Type DWord -Value 86400
 Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" -Name "MaxNegativeCacheTtl" -Type DWord -Value 0
-Stop-Service "WSearch" -Force
-Set-Service "WSearch" -StartupType Disabled
+
+$searchService = Get-Service -Name "WSearch" -ErrorAction SilentlyContinue
+if ($searchService) {
+    Write-Host "Đang vô hiệu hóa dịch vụ Windows Search..." -ForegroundColor Yellow
+    Stop-Service "WSearch" -Force -ErrorAction SilentlyContinue
+    Set-Service "WSearch" -StartupType Disabled -ErrorAction SilentlyContinue
+    Write-Host "Đã vô hiệu hóa dịch vụ Windows Search thành công!" -ForegroundColor Green
+} else {
+    Write-Host "Dịch vụ Windows Search không tồn tại trên hệ thống này." -ForegroundColor Yellow
+}
 
 powercfg -h off
 $shell = New-Object -ComObject Shell.Application
@@ -327,3 +345,23 @@ Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\P
 Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "SystemUsesLightTheme" -Value 0
 Stop-Process -Name explorer -Force
 Write-Host "`nCai dat thanh cong!" -ForegroundColor Green
+
+$downloadsGUID = "{088e3905-0323-4b02-9826-5d99428e115f}"
+New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\$downloadsGUID" -Force | Out-Null
+New-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\$downloadsGUID" -Force | Out-Null
+$picturesGUID = "{24ad3ad4-a569-4530-98e1-ab02f9417aa8}"
+New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\$picturesGUID" -Force | Out-Null
+New-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\$picturesGUID" -Force | Out-Null
+$musicGUID = "{3dfdf296-dbec-4fb4-81d1-6a3438bcf4de}"
+New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\$musicGUID" -Force | Out-Null
+New-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\$musicGUID" -Force | Out-Null
+$videosGUID = "{f86fa3ab-70d2-4fc7-9c99-fcbf05467f3a}"
+New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\$videosGUID" -Force | Out-Null
+New-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\$videosGUID" -Force | Out-Null
+$documentsGUID = "{d3162b92-9365-467a-956b-92703aca08af}"
+New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\$documentsGUID" -Force | Out-Null
+New-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\$documentsGUID" -Force | Out-Null
+$desktopGUID = "{B4BFCC3A-DB2C-424C-B029-7FE99A87C641}"
+New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\$desktopGUID" -Force | Out-Null
+New-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\$desktopGUID" -Force | Out-Null
+Stop-Process -Name explorer -Force -ErrorAction SilentlyContinue
