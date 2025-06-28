@@ -1,18 +1,3 @@
-[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
-if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
-    Write-Warning "Vui long chay script nay voi quyen Administrator!"
-    break
-}
-
-$regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\System"
-if (Test-Path $regPath) {
-    $disableRegedit = Get-ItemProperty -Path $regPath -Name "DisableRegistryTools" -ErrorAction SilentlyContinue
-    if ($disableRegedit -ne $null -and $disableRegedit.DisableRegistryTools -eq 1) {
-        Set-ItemProperty -Path $regPath -Name "DisableRegistryTools" -Value 0
-        Write-Host "Đã bật Registry Editor thành công!" -ForegroundColor Green
-    }
-}
-
 $path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects"
 Set-ItemProperty -Path "HKCU:\Control Panel\Mouse" -Name "MouseSpeed" -Value "0"
 Set-ItemProperty -Path "HKCU:\Control Panel\Mouse" -Name "MouseThreshold1" -Value "0"
@@ -364,4 +349,3 @@ New-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Expl
 $desktopGUID = "{B4BFCC3A-DB2C-424C-B029-7FE99A87C641}"
 New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\$desktopGUID" -Force | Out-Null
 New-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\$desktopGUID" -Force | Out-Null
-Stop-Process -Name explorer -Force -ErrorAction SilentlyContinue
