@@ -1,7 +1,7 @@
 ### Windows Setup
 
 ~~~bash
-powershell -nop -c "iwr -useb https://raw.githubusercontent.com/ovftank/ovftank/refs/heads/master/windows-dev-setup.ps1 | iex"
+powershell -nop -c "$content = [Text.Encoding]::UTF8.GetString((iwr https://raw.githubusercontent.com/ovftank/ovftank/refs/heads/master/windows-dev-setup.ps1 -UseBasicParsing).RawContentStream.ToArray()); if ($content.StartsWith([char]0xFEFF)) { $content = $content.Substring(1) }; iex $content"
 ~~~
 
 ### Code editor
