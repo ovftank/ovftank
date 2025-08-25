@@ -1,23 +1,6 @@
-### Windows Setup
+<div align="center">
 
-~~~bash
-powershell -nop -c "$content = [Text.Encoding]::UTF8.GetString((iwr https://raw.githubusercontent.com/ovftank/ovftank/refs/heads/master/windows-dev-setup.ps1 -UseBasicParsing).RawContentStream.ToArray()); if ($content.StartsWith([char]0xFEFF)) { $content = $content.Substring(1) }; iex $content"
-~~~
+<a href="https://t.me/ovftank"><img src="https://cdn.simpleicons.org/telegram" width="28" height="28" alt="Telegram" /></a>&nbsp;&nbsp;<a href="https://www.facebook.com/ovftank/"><img src="https://cdn.simpleicons.org/facebook" width="28" height="28" alt="Facebook" /></a>
 
-### Code editor
+</div>
 
-[Neovim Config](https://github.com/ovftank/neovim-config)
-
-<details>
-<summary>VSCode Config</summary>
-
-~~~bash
-vscode://profile/github/c32df29a3246d8d17cf16673408072ed
-~~~
-
-</details>
-
-## 🤝 Connect
-
-[![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/ovftank)
-[![Facebook](https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&labelColor=facebook&logo=facebook)](https://www.facebook.com/ovftank/)
