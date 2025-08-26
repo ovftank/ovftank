@@ -45,16 +45,20 @@ function Install-ChocoPackage {
         [switch]$SkipCheck
     )
 
-    if (-not $SkipCheck -and (Get-Command $PackageName -ErrorAction SilentlyContinue)) {
-        Write-Log "$DisplayName có r" -Level "INFO"
-        return
+    if (-not $SkipCheck) {
+        $whereResult = where.exe $PackageName 2>$null
+        if ($whereResult) {
+            Write-Log "$DisplayName có r" -Level "INFO"
+            return
+        }
     }
 
     Write-Log "cài $DisplayName..." -Level "INFO"
     try {
         if ($InstallArgs) {
             choco install $PackageName --params "'$InstallArgs'" -y *>&1 | Out-Null
-        } else {
+        }
+        else {
             choco install $PackageName -y *>&1 | Out-Null
         }
         Write-Log "đã cài $DisplayName!" -Level "INFO"
@@ -254,6 +258,7 @@ function Install-DevTools {
     Install-ChocoPackage -PackageName "ripgrep" -DisplayName "ripgrep (rg)"
     Install-ChocoPackage -PackageName "gzip" -DisplayName "gzip"
     Install-ChocoPackage -PackageName "mingw" -DisplayName "mingw"
+    Install-ChocoPackage -PackageName "make" -DisplayName "make"
 
     Install-ChocoPackage -PackageName "temurin" -DisplayName "Eclipse Temurin (Java)"
 
@@ -284,12 +289,11 @@ function Install-PNPM {
                 Write-Log "đã cài pnpm!" -Level "INFO"
 
                 try {
-                    & $pnpmPath env use --global jod *>&1 | Out-Null
+                    & $pnpmPath env use --global jod
                     Write-Log "đã cài node jod!" -Level "INFO"
                 }
                 catch {
                     Write-Log "k cài được node: $($_.Exception.Message)" -Level "WARN"
-                    Write-Log "có thể cần cài node trước" -Level "INFO"
                 }
             }
             else {
@@ -573,8 +577,15 @@ function Install-DraculaTheme {
         Expand-Archive -Path $colorToolZip -DestinationPath $colorToolPath -Force
 
         Write-Log "đang cài dracula theme..." -Level "INFO"
-        $colorToolExe = Join-Path $colorToolPath "ColorTool.exe"
-        $installFolder = Join-Path $colorToolPath "install"
+        $actualColorToolPath = Join-Path $colorToolPath "ColorTool"
+        if (Test-Path $actualColorToolPath) {
+            $colorToolExe = Join-Path $actualColorToolPath "ColorTool.exe"
+            $installFolder = Join-Path $actualColorToolPath "install"
+        }
+        else {
+            $colorToolExe = Join-Path $colorToolPath "ColorTool.exe"
+            $installFolder = Join-Path $colorToolPath "install"
+        }
 
         if (Test-Path $colorToolExe) {
             $shortcutPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\"
@@ -620,7 +631,7 @@ function Set-DarkTheme {
         Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "EnableTransparency" -Value 0
         Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "AppsUseLightTheme" -Value 0
         Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "SystemUsesLightTheme" -Value 0
-            Write-Log "đã config dark theme!" -Level "INFO"
+        Write-Log "đã config dark theme!" -Level "INFO"
     }
     catch {
         Write-Log "k config được dark theme: $($_)" -Level "WARN"
@@ -664,7 +675,7 @@ function Install-CodeEditor {
             "1" {
                 Write-Log "cài cursor..." -Level "INFO"
                 try {
-                    choco install cursor -y --force | Out-Null
+                    choco install cursoride -y --force | Out-Null
                     Write-Log "đã cài cursor!" -Level "INFO"
                 }
                 catch {
