@@ -42,19 +42,25 @@ function Install-ChocoPackage {
         [string]$PackageName,
         [string]$DisplayName = $PackageName,
         [string]$InstallArgs = "",
+        [string]$CommandName = "",
         [switch]$SkipCheck
     )
 
-    if (-not $SkipCheck -and (Get-Command $PackageName -ErrorAction SilentlyContinue)) {
-        Write-Log "$DisplayName có r" -Level "INFO"
-        return
+    if (-not $SkipCheck) {
+        $checkCommand = if ($CommandName) { $CommandName } else { $PackageName }
+        $whereResult = where.exe $checkCommand 2>$null
+        if ($whereResult) {
+            Write-Log "$DisplayName có r" -Level "INFO"
+            return
+        }
     }
 
     Write-Log "cài $DisplayName..." -Level "INFO"
     try {
         if ($InstallArgs) {
             choco install $PackageName --params "'$InstallArgs'" -y *>&1 | Out-Null
-        } else {
+        }
+        else {
             choco install $PackageName -y *>&1 | Out-Null
         }
         Write-Log "đã cài $DisplayName!" -Level "INFO"
@@ -141,7 +147,7 @@ function Optimize-System {
         try {
             Stop-Service "WSearch" -Force -ErrorAction SilentlyContinue
             Set-Service "WSearch" -StartupType Disabled -ErrorAction SilentlyContinue
-            Write-Log "đã tắt w!" -Level "INFO"
+            Write-Log "đã tắt Windows Search!" -Level "INFO"
         }
         catch {
             Write-Log "k tắt được search: $($_.Exception.Message)" -Level "WARN"
@@ -253,23 +259,16 @@ function Install-DevTools {
     Install-ChocoPackage -PackageName "eza" -DisplayName "eza"
     Install-ChocoPackage -PackageName "ripgrep" -DisplayName "ripgrep (rg)"
     Install-ChocoPackage -PackageName "gzip" -DisplayName "gzip"
-    Install-ChocoPackage -PackageName "mingw" -DisplayName "mingw"
 
-    Install-ChocoPackage -PackageName "temurin" -DisplayName "Eclipse Temurin (Java)"
-
-    Install-ChocoPackage -PackageName "neovim" -DisplayName "Neovim"
-    Install-ChocoPackage -PackageName "neovide" -DisplayName "Neovide"
-
-    Install-ChocoPackage -PackageName "lua" -DisplayName "Lua"
-    Install-ChocoPackage -PackageName "luarocks" -DisplayName "LuaRocks"
+    Install-ChocoPackage -PackageName "temurin" -DisplayName "Eclipse Temurin (Java)" -CommandName "java"
 }
 
 # ================== RUNTIME INSTALLATIONS ==================
 function Install-PNPM {
     Write-Log "check & cài pnpm..." -Level "INFO"
-    $pnpmPath = Join-Path $env:USERPROFILE "AppData\Local\pnpm\pnpm.exe"
-    if (Test-Path $pnpmPath) {
-        Write-Log "pnpm có r, skip..." -Level "INFO"
+
+    if (Get-Command pnpm -ErrorAction SilentlyContinue) {
+        Write-Log "pnpm có r, skip cài pnpm..." -Level "INFO"
     }
     else {
         Write-Log "đang cài pnpm..." -Level "INFO"
@@ -277,85 +276,49 @@ function Install-PNPM {
         try {
             $ProgressPreference = 'SilentlyContinue'
             Invoke-WebRequest https://get.pnpm.io/install.ps1 -UseBasicParsing | Invoke-Expression | Out-Null
-            $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
             $ProgressPreference = 'Continue'
 
-            if (Test-Path $pnpmPath) {
-                Write-Log "đã cài pnpm!" -Level "INFO"
-
-                try {
-                    & $pnpmPath env use --global jod *>&1 | Out-Null
-                    Write-Log "đã cài node jod!" -Level "INFO"
-                }
-                catch {
-                    Write-Log "k cài được node: $($_.Exception.Message)" -Level "WARN"
-                    Write-Log "có thể cần cài node trước" -Level "INFO"
-                }
-            }
-            else {
-                Write-Log "k cài được pnpm!" -Level "ERROR"
-            }
+            Write-Log "đã cài pnpm!" -Level "INFO"
         }
         catch {
             Write-Log "lỗi cài pnpm: $_" -Level "ERROR"
         }
     }
+
+    try {
+        Write-Log "đang cài node jod..." -Level "INFO"
+        pnpm env use --global jod 2>&1 | Out-Null
+        Write-Log "đã cài node jod!" -Level "INFO"
+    }
+    catch {
+        Write-Log "k cài được node: $($_.Exception.Message)" -Level "WARN"
+    }
 }
 
-function Install-Python {
-    Write-Log "check & cài python..." -Level "INFO"
-    $pythonVersion = "3.10.11"
-    $pythonCommand = Get-Command python -ErrorAction SilentlyContinue
-    $currentPythonVersion = if ($pythonCommand) {
-        try {
-            python -c "import sys; print('.'.join(map(str, sys.version_info[:3])))"
-        }
-        catch {
-            $null
-        }
+function Install-Uv {
+    Write-Log "check & cài uv..." -Level "INFO"
+    if (Get-Command uv -ErrorAction SilentlyContinue) {
+        Write-Log "uv có r, skip..." -Level "INFO"
     }
     else {
-        $null
-    }
+        Write-Log "đang cài uv..." -Level "INFO"
 
-    if (-not $pythonCommand -or $currentPythonVersion -ne $pythonVersion) {
-        Write-Log "đang tải python $pythonVersion..." -Level "INFO"
         try {
-            $pythonUrl = "https://www.python.org/ftp/python/$pythonVersion/python-$pythonVersion-amd64.exe"
-            $pythonInstaller = "$env:TEMP\python-$pythonVersion-amd64.exe"
-
             $ProgressPreference = 'SilentlyContinue'
-            Invoke-WebRequest -Uri $pythonUrl -OutFile $pythonInstaller
+            powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex" | Out-Null
+            $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
             $ProgressPreference = 'Continue'
 
-            Write-Log "đang cài python $pythonVersion..." -Level "INFO"
-            $pythonArgs = @(
-                "/quiet"
-                "InstallAllUsers=1"
-                "PrependPath=1"
-                "AssociateFiles=1"
-                "Include_pip=1"
-                "Include_tcltk=1"
-                "Include_test=0"
-                "Include_doc=0"
-                "Include_launcher=0"
-                "InstallLauncherAllUsers=1"
-                "Include_tools=1"
-                "Shortcuts=0"
-                "SimpleInstall=1"
-            )
-            Start-Process -FilePath $pythonInstaller -ArgumentList $pythonArgs -Wait
-            Remove-Item $pythonInstaller -Force -ErrorAction SilentlyContinue
-
-            $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
-            Write-Log "đã cài python $pythonVersion!" -Level "INFO"
+            if (Get-Command uv -ErrorAction SilentlyContinue) {
+                Write-Log "đã cài uv!" -Level "INFO"
+            }
+            else {
+                Write-Log "k cài được uv!" -Level "ERROR"
+            }
         }
         catch {
-            Write-Log "lỗi cài python: $($_)" -Level "ERROR"
+            Write-Log "lỗi cài uv: $_" -Level "ERROR"
         }
-    }
-    else {
-        Write-Log "python $pythonVersion có r." -Level "INFO"
     }
 }
 
@@ -573,8 +536,15 @@ function Install-DraculaTheme {
         Expand-Archive -Path $colorToolZip -DestinationPath $colorToolPath -Force
 
         Write-Log "đang cài dracula theme..." -Level "INFO"
-        $colorToolExe = Join-Path $colorToolPath "ColorTool.exe"
-        $installFolder = Join-Path $colorToolPath "install"
+        $actualColorToolPath = Join-Path $colorToolPath "ColorTool"
+        if (Test-Path $actualColorToolPath) {
+            $colorToolExe = Join-Path $actualColorToolPath "ColorTool.exe"
+            $installFolder = Join-Path $actualColorToolPath "install"
+        }
+        else {
+            $colorToolExe = Join-Path $colorToolPath "ColorTool.exe"
+            $installFolder = Join-Path $colorToolPath "install"
+        }
 
         if (Test-Path $colorToolExe) {
             $shortcutPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\"
@@ -620,7 +590,7 @@ function Set-DarkTheme {
         Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "EnableTransparency" -Value 0
         Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "AppsUseLightTheme" -Value 0
         Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "SystemUsesLightTheme" -Value 0
-            Write-Log "đã config dark theme!" -Level "INFO"
+        Write-Log "đã config dark theme!" -Level "INFO"
     }
     catch {
         Write-Log "k config được dark theme: $($_)" -Level "WARN"
@@ -650,59 +620,14 @@ function Add-ThisPCFolders {
     }
 }
 
-# ================== CODE EDITOR SELECTION ==================
-function Install-CodeEditor {
-    Write-Log "chọn code editor..." -Level "INFO"
-    Write-Host "`nChọn code editor muốn cài:" -ForegroundColor Yellow
-    Write-Host "1. Cursor" -ForegroundColor Cyan
-    Write-Host "2. VS Code" -ForegroundColor Cyan
-    Write-Host "3. Skip" -ForegroundColor Cyan
-
-    do {
-        $choice = Read-Host "`nNhập lựa chọn (1-3)"
-        switch ($choice) {
-            "1" {
-                Write-Log "cài cursor..." -Level "INFO"
-                try {
-                    choco install cursor -y --force | Out-Null
-                    Write-Log "đã cài cursor!" -Level "INFO"
-                }
-                catch {
-                    Write-Log "lỗi cài cursor: $($_)" -Level "ERROR"
-                }
-                break
-            }
-            "2" {
-                Write-Log "cài vscode..." -Level "INFO"
-                try {
-                    choco install vscode -y --force | Out-Null
-                    Write-Log "đã cài vscode!" -Level "INFO"
-                }
-                catch {
-                    Write-Log "lỗi cài vscode: $($_)" -Level "ERROR"
-                }
-                break
-            }
-            "3" {
-                Write-Log "skip" -Level "INFO"
-                break
-            }
-            default {
-                Write-Host "Chọn từ 1-3 thôi!" -ForegroundColor Red
-            }
-        }
-    } while ($choice -notmatch "^[1-3]$")
-}
-
 # ================== EXECUTION WORKFLOW ==================
 Install-Chocolatey
 Install-Git
 Install-DevTools
 
 Install-PNPM
-Install-Python
+Install-Uv
 
-Install-CodeEditor
 Install-JetBrainsMonoFont
 Install-Clink
 Install-OpenKey
