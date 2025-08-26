@@ -289,7 +289,6 @@ function Install-PNPM {
                 }
                 catch {
                     Write-Log "k cài được node: $($_.Exception.Message)" -Level "WARN"
-                    Write-Log "có thể cần cài node trước" -Level "INFO"
                 }
             }
             else {
@@ -573,8 +572,14 @@ function Install-DraculaTheme {
         Expand-Archive -Path $colorToolZip -DestinationPath $colorToolPath -Force
 
         Write-Log "đang cài dracula theme..." -Level "INFO"
-        $colorToolExe = Join-Path $colorToolPath "ColorTool.exe"
-        $installFolder = Join-Path $colorToolPath "install"
+        $actualColorToolPath = Join-Path $colorToolPath "ColorTool"
+        if (Test-Path $actualColorToolPath) {
+            $colorToolExe = Join-Path $actualColorToolPath "ColorTool.exe"
+            $installFolder = Join-Path $actualColorToolPath "install"
+        } else {
+            $colorToolExe = Join-Path $colorToolPath "ColorTool.exe"
+            $installFolder = Join-Path $colorToolPath "install"
+        }
 
         if (Test-Path $colorToolExe) {
             $shortcutPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\"
@@ -664,7 +669,7 @@ function Install-CodeEditor {
             "1" {
                 Write-Log "cài cursor..." -Level "INFO"
                 try {
-                    choco install cursor -y --force | Out-Null
+                    choco install cursoride -y --force | Out-Null
                     Write-Log "đã cài cursor!" -Level "INFO"
                 }
                 catch {
